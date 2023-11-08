@@ -3,22 +3,27 @@
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using ModeloSimples.Domain.Events;
+using ModeloSimples.Infrastructure.Shared.Interfaces;
 
 public class PessoaBloqueadaEventConsumer : IConsumer<PessoaBloqueadaEvent>
 {
-    private readonly ILogger<PessoaBloqueadaEventConsumer> _logger;
+    private const string EventoRecebidoFormat = "Evento Recebido PessoaBloqueadaEvent em PessoaBloqueadaEventConsumer com o ID {0}";
 
-    public PessoaBloqueadaEventConsumer(ILogger<PessoaBloqueadaEventConsumer> logger)
+    private readonly ILogger<PessoaBloqueadaEventConsumer> _logger;
+    private readonly IWebhook<PessoaBloqueadaEvent> _webhook;
+
+    public PessoaBloqueadaEventConsumer(ILogger<PessoaBloqueadaEventConsumer> logger, IWebhook<PessoaBloqueadaEvent> webhook)
     {
         _logger = logger;
+        _webhook = webhook;
     }
 
-    public Task Consume(ConsumeContext<PessoaBloqueadaEvent> context)
+    public async Task Consume(ConsumeContext<PessoaBloqueadaEvent> context)
     {
         var pessoaId = context.Message.PessoaId;
 
-        _logger.LogInformation($"Evento Recebido PessoaBloqueadaEvent em PessoaBloqueadaEventConsumer com o ID {pessoaId}");
+        await _webhook.EnviarEventoAsync(context.Message);
 
-        return Task.CompletedTask;
+        _logger.LogInformation(string.Format(EventoRecebidoFormat, pessoaId));
     }
 }

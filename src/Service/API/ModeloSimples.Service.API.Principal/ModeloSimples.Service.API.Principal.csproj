@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Application\ModeloSimples.Application\ModeloSimples.Application.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Integration\ModeloSimples.Infrastructure.Integration.ServiceOut\ModeloSimples.Infrastructure.Integration.ServiceOut.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Shared\ModeloSimples.Infrastructure.Shared\ModeloSimples.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
