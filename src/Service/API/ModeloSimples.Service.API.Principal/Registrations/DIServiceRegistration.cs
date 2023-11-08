@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using ModeloSimples.Application.Behaviors;
 using ModeloSimples.Domain.Interfaces;
 using ModeloSimples.Domain.Services;
 using ModeloSimples.Infrastructure.DataAccess;
 using ModeloSimples.Infrastructure.DataAccess.Queries;
 using ModeloSimples.Infrastructure.DataAccess.Queries.Mappings;
+using ModeloSimples.Infrastructure.Integration.ServiceOut.Service.Http;
+using ModeloSimples.Infrastructure.Integration.ServiceOut.Service.Webhook;
 using ModeloSimples.Infrastructure.Shared.Interfaces;
 using ModeloSimples.Infrastructure.Shared.Interfaces.Queries;
 
@@ -28,6 +29,9 @@ public static class DIServiceRegistration
         builder.Services.AddAutoMapper(mappingProfiles.ToArray());
 
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
+        builder.Services.AddHttpClient<IHttpClientService, HttpClientService>();
+        builder.Services.AddScoped(typeof(IWebhook<>), typeof(WebhookHandler<>));
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
 

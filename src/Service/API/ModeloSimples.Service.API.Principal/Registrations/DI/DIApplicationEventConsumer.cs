@@ -17,6 +17,8 @@ public static class DIApplicationEventConsumer
         services.AddScoped<PessoaEditadaEventConsumer>();
         services.AddScoped<PessoaFisicaEditadaEventConsumer>();
         services.AddScoped<PessoaJuridicaEditadaEventConsumer>();
+        services.AddScoped<PessoaBloqueadaEventConsumer>();
+        services.AddScoped<PessoaDesbloqueadaEventConsumer>();
 
         return services;
     }

@@ -86,6 +86,25 @@ public static class MassTransitServiceRegistration
                     ep.Consumer<PessoaJuridicaEditadaEventConsumer>(context);
                     ep.Consumer<PublishErrorHandler>(context);
                 });
+
+                cfgRabbit.ReceiveEndpoint("PessoaBloqueada_APIPrincipal", ep =>
+                {
+                    ep.UseMessageRetry(x => x.Interval(2, 1000));
+                    ep.Durable = true;
+                    ep.Bind("PessoaBloqueada");
+                    ep.Consumer<PessoaBloqueadaEventConsumer>(context);
+                    ep.Consumer<PublishErrorHandler>(context);
+                });
+
+                cfgRabbit.ReceiveEndpoint("PessoaDesbloqueada_APIPrincipal", ep =>
+                {
+                    ep.UseMessageRetry(x => x.Interval(2, 1000));
+                    ep.Durable = true;
+                    ep.Bind("PessoaDesbloqueada");
+                    ep.Consumer<PessoaDesbloqueadaEventConsumer>(context);
+                    ep.Consumer<PublishErrorHandler>(context);
+                });
+
             });
         });
 
