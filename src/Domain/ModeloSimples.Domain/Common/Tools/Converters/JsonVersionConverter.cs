@@ -7,6 +7,8 @@ using ModeloSimples.Domain.ValueObjects;
 
 public class JsonVersionConverter : JsonConverter
 {
+    private const string Dados = "Dados";
+
     public override bool CanConvert(Type objectType)
     {
         return objectType == typeof(Versionamento);
@@ -17,7 +19,7 @@ public class JsonVersionConverter : JsonConverter
         var jObject = JObject.Load(reader);
 
         // Verifica se a propriedade "Dados" não tem o atributo [JsonIgnore]
-        var dadosProperty = jObject.Property("Dados");
+        var dadosProperty = jObject.Property(Dados);
         if (dadosProperty != null && dadosProperty.HasValues)
         {
             // Deserializa a propriedade "Dados" para a lista de Pessoa

@@ -7,8 +7,8 @@ public class PessoaModelMapping : DommelEntityMap<PessoaModel>
 {
     public PessoaModelMapping()
     {
-        ToTable("Pessoa");
-        Map(p => p.Id).ToColumn("PessoaId").IsKey();
-        Map(p => p.Tipo).ToColumn("Tipo");   
+        ToTable(DapperConstant.PessoaModel.Pessoa);
+        Map(p => p.Id).ToColumn(DapperConstant.PessoaModel.PessoaId).IsKey();
+        Map(p => p.Tipo).ToColumn(DapperConstant.PessoaModel.Tipo);   
     }
 }

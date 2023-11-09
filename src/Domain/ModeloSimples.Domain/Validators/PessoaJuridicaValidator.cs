@@ -10,6 +10,7 @@ public class PessoaJuridicaValidator : AbstractValidator<PessoaJuridica>
     private const string MensagemNomeFantasiaVazio = "O nome fantasia não pode estar em branco.";
     private const string MensagemNomeFantasiaExcedente = "O nome fantasia não pode ter mais de 250 caracteres.";
     private const string MensagemCNAEInvalido = "O CNAE deve ter 7 dígitos.";
+    private const string MatcheCNAE = @"^\d{7}$";
 
     public PessoaJuridicaValidator()
     {
@@ -22,6 +23,6 @@ public class PessoaJuridicaValidator : AbstractValidator<PessoaJuridica>
             .MaximumLength(250).WithMessage(MensagemNomeFantasiaExcedente);
 
         RuleFor(pessoaJuridica => pessoaJuridica.CNAE)
-            .Matches(@"^\d{7}$").WithMessage(MensagemCNAEInvalido);
+            .Matches(MatcheCNAE).WithMessage(MensagemCNAEInvalido);
     }
 }

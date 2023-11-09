@@ -1,14 +1,29 @@
 ﻿namespace ModeloSimples.Application.EventBus.Consumers;
 
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using ModeloSimples.Domain.Events;
+using ModeloSimples.Infrastructure.Shared.Interfaces;
 
 public class PessoaFisicaEditadaEventConsumer : IConsumer<PessoaFisicaEditadaEvent>
 {
-    public Task Consume(ConsumeContext<PessoaFisicaEditadaEvent> context)
-    {
-        //var pessoaFisicaId = context.Message.pessoaFisicaId;
+    private const string EventoRecebidoFormat = "Evento Recebido PessoaFisicaEditadaEvent em PessoaFisicaEditadaEventConsumer com o ID {0}";
 
-        return Task.CompletedTask;
+    private readonly ILogger<PessoaFisicaEditadaEventConsumer> _logger;
+    private readonly IWebhook<PessoaFisicaEditadaEvent> _webhook;
+
+    public PessoaFisicaEditadaEventConsumer(ILogger<PessoaFisicaEditadaEventConsumer> logger, IWebhook<PessoaFisicaEditadaEvent> webhook)
+    {
+        _logger = logger;
+        _webhook = webhook;
+    }
+
+    public async Task Consume(ConsumeContext<PessoaFisicaEditadaEvent> context)
+    {
+        var pessoaId = context.Message.PessoaFisicaId;
+
+        await _webhook.EnviarEventoAsync(context.Message);
+
+        _logger.LogInformation(string.Format(EventoRecebidoFormat, pessoaId));
     }
 }

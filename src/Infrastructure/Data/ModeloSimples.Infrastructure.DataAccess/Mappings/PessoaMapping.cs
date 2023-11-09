@@ -20,17 +20,17 @@ public class PessoaMapping
 
         builder.OwnsOne(p => p.Controle, auditoria =>
         {
-            auditoria.Property(a => a.Created).HasColumnName("Criado");
-            auditoria.Property(a => a.Modified).HasColumnName("Modificado");
-            auditoria.Property(a => a.IsRemoved).HasColumnName("Removido");
-            auditoria.Property(a => a.IsBlocked).HasColumnName("Bloquado");
+            auditoria.Property(a => a.Created).HasColumnName(MappingConstant.Auditoria.Criado);
+            auditoria.Property(a => a.Modified).HasColumnName(MappingConstant.Auditoria.Modificado);
+            auditoria.Property(a => a.IsRemoved).HasColumnName(MappingConstant.Auditoria.Removido);
+            auditoria.Property(a => a.IsBlocked).HasColumnName(MappingConstant.Auditoria.Criado);
         });
 
         builder.OwnsOne(p => p.Versao, versao =>
         {
-            versao.Property<IReadOnlyCollection<Pessoa>>("Dados")
-                .HasColumnName("Versao")
-                .HasColumnType("nvarchar(max)")
+            versao.Property<IReadOnlyCollection<Pessoa>>(MappingConstant.Versionamento.Versao)
+                .HasColumnName(MappingConstant.Versionamento.Versao)
+                .HasColumnType(MappingConstant.ColumnType.NVarCharMax)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v, Formatting.None),
                     v => JsonConvert.DeserializeObject<IReadOnlyCollection<Pessoa>>(v)
