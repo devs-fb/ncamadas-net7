@@ -6,6 +6,8 @@ using System.Reflection;
 
 public class MassTransitEventBus : IEventBus
 {
+    private const string MethodPublish = "Publish";
+
     private readonly IPublishEndpoint _publishEndpoint;
 
     public MassTransitEventBus(IPublishEndpoint publishEndpoint)
@@ -23,7 +25,7 @@ public class MassTransitEventBus : IEventBus
         foreach (var message in messages)
         {
             var publishMethod = typeof(MassTransitEventBus)
-                .GetMethod("Publish", BindingFlags.Instance | BindingFlags.Public)
+                .GetMethod(MethodPublish, BindingFlags.Instance | BindingFlags.Public)
                 .MakeGenericMethod(message.GetType());
 
             await (Task)publishMethod.Invoke(this, new[] { message });

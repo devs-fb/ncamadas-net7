@@ -4,7 +4,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ModeloSimples.Domain.Aggregates;
-using ModeloSimples.Domain.Exceptions;
 using ModeloSimples.Domain.Interfaces;
 using ModeloSimples.Infrastructure.Shared.Common;
 using ModeloSimples.Infrastructure.Shared.DTO;

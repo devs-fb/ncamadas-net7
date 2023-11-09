@@ -8,10 +8,22 @@ using ModeloSimples.Infrastructure.Shared.Common;
 using ModeloSimples.Infrastructure.Shared.DTO;
 using ModeloSimples.Service.API.Principal.Common;
 
-[Route("api/[controller]")]
+[Route(ConstantGlobal.RouteApiController)]
 [ApiController]
 public class PessoaController : SingleBaseController 
 {
+    private const string NenhumaPessoaEncontrada = "Nenhuma pessoa encontrada.";
+    private const string ErroAoExecutarOComando = "Erro ao executar o comando.";
+    private const string HttpPostCriar = "Criar";
+    private const string HttpPutEditar = "Editar";
+    private const string HttpPostBuscar = "Buscar";
+    private const string HttpGetPessoaId = "{pessoaId}";
+    private const string HttpDeletePessoaId = "{pessoaId}";
+    private const string HttpGetAuditarPessoaId = "Auditar/{pessoaId}";
+    private const string HttpPostBloquear = "Bloquear";
+    private const string HttpPostDesbloquear = "Desbloquear";
+
+
     private readonly IMediator _mediator;
 
     public PessoaController(IMediator mediator)
@@ -19,7 +31,7 @@ public class PessoaController : SingleBaseController
         _mediator = mediator;
     }
 
-    [HttpPost("Criar")]
+    [HttpPost(HttpPostCriar)]
     public async Task<IActionResult> Criar([FromBody] PessoaModel entidade)
     {
         var comando = new PessoaCriarCommand(entidade);
@@ -32,11 +44,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return BadRequest(new Resposta<string>("Erro ao executar o comando."));
+            return BadRequest(new Resposta<string>(ErroAoExecutarOComando));
         }
     }
 
-    [HttpPut("Editar")]
+    [HttpPut(HttpPutEditar)]
     public async Task<IActionResult> Editar(Guid id, [FromBody] PessoaModel entidade)
     {
         var comando = new PessoaEditarCommand(id, entidade);
@@ -49,11 +61,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return BadRequest(new Resposta<string>("Erro ao executar o comando."));
+            return BadRequest(new Resposta<string>(ErroAoExecutarOComando));
         }
     }
 
-    [HttpPost("Buscar")]
+    [HttpPost(HttpPostBuscar)]
     public async Task<IActionResult> Buscar([FromBody] PessoasBuscarCommandQuery consulta)
     {
         var resultadoConsulta = await _mediator.Send(consulta);
@@ -64,11 +76,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return NotFound(new Resposta<string>("Nenhuma pessoa encontrada."));
+            return NotFound(new Resposta<string>(NenhumaPessoaEncontrada));
         }
     }
 
-    [HttpGet("{pessoaId}")]
+    [HttpGet(HttpGetPessoaId)]
     public async Task<IActionResult> Obter(Guid pessoaId)
     {
         var consulta = new PessoaObterCommandQuery(pessoaId);
@@ -80,11 +92,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return NotFound(new Resposta<string>("Pessoa não encontrada."));
+            return NotFound(new Resposta<string>(NenhumaPessoaEncontrada));
         }
     }
 
-    [HttpDelete("{pessoaId}")]
+    [HttpDelete(HttpDeletePessoaId)]
     public async Task<IActionResult> Remover(Guid pessoaId)
     {
         var comando = new PessoaRemoverCommand(pessoaId);
@@ -96,11 +108,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return NotFound(new Resposta<string>("Pessoa não encontrada."));
+            return NotFound(new Resposta<string>(NenhumaPessoaEncontrada));
         }
     }
 
-    [HttpGet("Auditar/{pessoaId}")]
+    [HttpGet(HttpGetAuditarPessoaId)]
     public async Task<IActionResult> Auditar(Guid pessoaId)
     {
         var consulta = new PessoaAuditarCommandQuery(pessoaId);
@@ -112,11 +124,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return NotFound(new Resposta<string>("Pessoa não encontrada."));
+            return NotFound(new Resposta<string>(NenhumaPessoaEncontrada));
         }
     }
 
-    [HttpPost("Bloquear")]
+    [HttpPost(HttpPostBloquear)]
     public async Task<IActionResult> Bloquear(Guid pessoaId)
     {
         var comando = new PessoaBloquearCommand(pessoaId);
@@ -129,11 +141,11 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return BadRequest(new Resposta<string>("Erro ao executar o comando."));
+            return BadRequest(new Resposta<string>(ErroAoExecutarOComando));
         }
     }
 
-    [HttpPost("Desbloquear")]
+    [HttpPost(HttpPostDesbloquear)]
     public async Task<IActionResult> Desbloquear(Guid pessoaId)
     {
         var comando = new PessoaDesbloquearCommand(pessoaId);
@@ -146,7 +158,7 @@ public class PessoaController : SingleBaseController
         }
         else
         {
-            return BadRequest(new Resposta<string>("Erro ao executar o comando."));
+            return BadRequest(new Resposta<string>(ErroAoExecutarOComando));
         }
     }
 }

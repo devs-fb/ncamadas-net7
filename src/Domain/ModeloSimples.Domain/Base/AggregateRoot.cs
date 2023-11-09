@@ -15,5 +15,6 @@ public abstract class AggregateRoot
     public IReadOnlyList<IEvent> DomainEvents => _domainEvents;
 
     protected void RegistrarEvento(IEvent domainEvent) => _domainEvents.Add(domainEvent);
+
     public void LimparEventos() => _domainEvents.Clear();
 }

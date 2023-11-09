@@ -7,9 +7,9 @@ public class PessoaJuridicaModelMapping : DommelEntityMap<PessoaJuridicaModel>
 {
     public PessoaJuridicaModelMapping()
     {
-        ToTable("PessoaJuridica");
-        Map(p => p.RazaoSocial).ToColumn("RazaoSocial");
-        Map(p => p.NomeFantasia).ToColumn("NomeFantasia");
-        Map(p => p.CNAE).ToColumn("CNAE");
+        ToTable(DapperConstant.PessoaJuridicaModel.PessoaJuridica);
+        Map(p => p.RazaoSocial).ToColumn(DapperConstant.PessoaJuridicaModel.RazaoSocial);
+        Map(p => p.NomeFantasia).ToColumn(DapperConstant.PessoaJuridicaModel.NomeFantasia);
+        Map(p => p.CNAE).ToColumn(DapperConstant.PessoaJuridicaModel.CNAE);
     }
 }

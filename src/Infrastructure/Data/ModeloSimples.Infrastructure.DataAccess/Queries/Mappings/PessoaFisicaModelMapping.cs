@@ -7,9 +7,9 @@ public class PessoaFisicaModelMapping : DommelEntityMap<PessoaFisicaModel>
 {
     public PessoaFisicaModelMapping()
     {
-        ToTable("PessoaFisica");
-        Map(p => p.NomeSocial).ToColumn("NomeSocial");
-        Map(p => p.DataNascimento).ToColumn("DataNascimento");
-        Map(p => p.Genero).ToColumn("Genero");
+        ToTable(DapperConstant.PessoaFisicaModel.PessoaFisica);
+        Map(p => p.NomeSocial).ToColumn(DapperConstant.PessoaFisicaModel.NomeSocial);
+        Map(p => p.DataNascimento).ToColumn(DapperConstant.PessoaFisicaModel.DataNascimento);
+        Map(p => p.Genero).ToColumn(DapperConstant.PessoaFisicaModel.Genero);
     }
 }

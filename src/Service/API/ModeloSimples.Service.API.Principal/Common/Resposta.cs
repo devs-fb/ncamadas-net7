@@ -4,6 +4,9 @@ using System.Collections;
 
 public class Resposta<T>
 {
+    private const string OperacaoBemSucedida = "Operação bem-sucedida.";
+    private const string Desconhecido = "Desconhecido";
+
     public bool Sucesso { get; private set; }
     public string TipoDeDados { get; private set; }
     public T Dados { get; private set; }
@@ -14,7 +17,7 @@ public class Resposta<T>
         Sucesso = true;
         TipoDeDados = ObterNomeDoTipo(dados);
         Dados = dados;
-        Mensagem = "Operação bem-sucedida.";
+        Mensagem = OperacaoBemSucedida;
     }
 
     public Resposta(string mensagemErro)
@@ -45,6 +48,6 @@ public class Resposta<T>
             return tipo.Name;
         }
     
-        return "Desconhecido";
+        return Desconhecido;
     }
 }

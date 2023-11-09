@@ -11,8 +11,6 @@ public class PessoaValidator : AbstractValidator<Pessoa>
     private const string MensagemIdVazia = "O ID da pessoa não pode estar em branco.";
     private const string MensagemTipoVazio = "O tipo da pessoa não pode estar em branco.";
     private const string MensagemTipoInvalido = "O tipo da pessoa deve ser 'PessoaFisica' ou 'PessoaJuridica'.";
-    private const string MensagemFalhaCriarPessoaFisica = "Falha ao criar pessoa física.";
-    private const string MensagemFalhaCriarPessoaJuridica = "Falha ao criar pessoa jurídica.";
     private const string MensagemPessoaFisicaNula = "A pessoa física não pode ser nula.";
     private const string MensagemPessoaJuridicaNula = "A pessoa jurídica não pode ser nula.";
 
@@ -29,17 +27,11 @@ public class PessoaValidator : AbstractValidator<Pessoa>
         When(pessoa => pessoa.Tipo.Equals(TipoPessoaFisica, StringComparison.OrdinalIgnoreCase), () => {
             RuleFor(pessoa => pessoa.PessoaFisica)
                 .NotNull().WithMessage(MensagemPessoaFisicaNula);
-
-            //RuleFor(pessoa => pessoa.PessoaFisica.CriarNovaPessoaFisica())
-            //    .Equal(true).WithMessage(MensagemFalhaCriarPessoaFisica);
         });
 
         When(pessoa => pessoa.Tipo.Equals(TipoPessoaJuridica, StringComparison.OrdinalIgnoreCase), () => {
             RuleFor(pessoa => pessoa.PessoaJuridica)
                 .NotNull().WithMessage(MensagemPessoaJuridicaNula);
-
-            //RuleFor(pessoa => pessoa.PessoaJuridica.CriarNovaPessoaJuridica())
-            //    .Equal(true).WithMessage(MensagemFalhaCriarPessoaJuridica);
         });
     }
 }
