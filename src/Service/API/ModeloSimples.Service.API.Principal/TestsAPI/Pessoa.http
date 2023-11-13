@@ -1,0 +1,125 @@
+﻿@protocol=https
+@hostname=localhost
+@port=21001
+@sufix=api
+@host = {{protocol}}://{{hostname}}:{{port}}/{{sufix}}
+
+//Assita e conheça o recurso em: https://youtu.be/DZVRi6fEPIA?si=_XCguDXilkLo5oON
+
+### Criar Pessoa Fisica
+
+POST {{host}}/Pessoa/Criar
+Content-Type: application/json
+
+{
+  "tipo": "F",
+  "pessoaFisica": {
+    "nomeSocial": "NomeSocial",
+    "dataNascimento": "1980-11-12T00:00:00Z",
+    "genero": "M"
+  }
+}
+
+### Criar Pessoa Juridica
+
+POST {{host}}/Pessoa/Criar
+Content-Type: application/json
+
+{
+  "tipo": "J",
+  "pessoaJuridica": {
+    "razaoSocial": "RazaoSocial",
+    "nomeFantasia": "NomeFantasia",
+    "cnae": "1234567"
+  }
+}
+
+### Editar Pessoa Fisica
+
+PUT {{host}}/Pessoa/Editar?id=1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "tipo": "F",
+  "pessoaFisica": {
+    "nomeSocial": "NomeSocial",
+    "dataNascimento": "2023-11-12T00:00:00Z",
+    "genero": "M"
+  }
+}
+
+### Editar Pessoa Juridica
+
+PUT {{host}}/Pessoa/Editar?id=1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "tipo": "J"
+  "pessoaJuridica": {
+    "razaoSocial": "RazaoSocial",
+    "nomeFantasia": "NomeFantasia",
+    "cnae": "1234567"
+  }
+}
+
+### Buscar Pessoa
+
+POST {{host}}/Pessoa/Buscar
+Content-Type: application/json
+
+{
+  "paginacaoOrdenacao": {
+    "paginacao": {
+      "pagina": 1,
+      "tamanhoPagina": 10,
+      "totalRegistro": 100
+    },
+    "ordenacao": [
+      {
+        "campo": "Campo",
+        "ascendente": true
+      }
+    ]
+  },
+  "pessoa": {
+    "id": "1",
+    "tipo": "tipo",
+    "pessoaFisica": {
+      "nomeSocial": "NomeSocial",
+      "dataNascimento": "2023-11-12T00:00:00Z",
+      "genero": "Genero"
+    },
+    "pessoaJuridica": {
+      "razaoSocial": "RazaoSocial",
+      "nomeFantasia": "NomeFantasia",
+      "cnae": "CNAE"
+    }
+  }
+}
+
+### Obter Pessoa por ID
+
+GET {{host}}/Pessoa/{pessoaId}
+Content-Type: application/json
+
+### Deletar Pessoa por ID
+
+DELETE {{host}}/Pessoa/{pessoaId}
+Content-Type: application/json
+
+### Auditar Pessoa por ID
+
+GET {{host}}/Pessoa/Auditar/{pessoaId}
+Content-Type: application/json
+
+### Bloquear Pessoa
+
+POST {{host}}/Pessoa/Bloquear?pessoaId=1
+Content-Type: application/json
+
+### Desbloquear Pessoa
+
+POST {{host}}/Pessoa/Desbloquear?pessoaId=1
+Content-Type: application/json

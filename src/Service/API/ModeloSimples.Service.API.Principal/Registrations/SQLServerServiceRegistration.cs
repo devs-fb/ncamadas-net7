@@ -5,12 +5,13 @@ using System.Data;
 
 public static class SQLServerServiceRegistration
 {
-    public static IServiceCollection AddSQLServer(this IServiceCollection services, IConfiguration configuration)
+    private const string StringConnectionName = "DefaultConnection";
+    public static IServiceCollection AddSQLServer(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        var sqlServerPrincipalConnectionString = configuration.GetConnectionString("DefaultConnection");
+        var sqlServerPrincipalConnectionString = configuration.GetConnectionString(StringConnectionName);
 
         services.AddDbContext<PrincipalContext>(options =>
-        {
+        {           
             options.UseSqlServer(sqlServerPrincipalConnectionString);
             options.LogTo(Console.WriteLine, LogLevel.Error);
         });
@@ -18,10 +19,11 @@ public static class SQLServerServiceRegistration
         services.AddScoped<IDbConnection>(provider =>
         {
             var configuration = provider.GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection"); 
-            return new SqlConnection(connectionString);
+            var connection = new SqlConnection(sqlServerPrincipalConnectionString);
+            
+            return connection;
         });
 
-        return services; 
+        return services;
     }
 }
