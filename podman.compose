@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  ncamadas-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: ncamadas-sqlserver
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:1434:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+      - mssqllogs:/var/opt/mssql/logs
+    restart: always
+    labels:
+      type: "ncamadas"
+    networks:
+      - ncamadas-network
+
+networks:
+  ncamadas-network:
+    driver: bridge
+
+volumes:
+  mssqldata:
+  mssqllogs:

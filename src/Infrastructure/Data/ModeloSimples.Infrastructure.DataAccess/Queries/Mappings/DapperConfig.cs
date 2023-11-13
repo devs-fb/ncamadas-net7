@@ -1,16 +1,25 @@
 ﻿namespace ModeloSimples.Infrastructure.DataAccess.Queries.Mappings;
 
 using Dapper.FluentMap;
+using Dapper.FluentMap.Configuration;
+using Dapper.FluentMap.Mapping;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-public class DapperConfig
+public static class DapperConfig
 {
+    private static bool _isConfigured = false;
     public static void ConfigureMappings()
     {
-        FluentMapper.Initialize(config =>
+        if (!_isConfigured)
         {
-            config.AddMap(new PessoaModelMapping());
-            config.AddMap(new PessoaFisicaModelMapping());
-            config.AddMap(new PessoaJuridicaModelMapping());
-        });
+            FluentMapper.EntityMaps.Clear();
+            FluentMapper.Initialize(config => {});
+
+            _ = FluentMapper.EntityMaps.TryAdd(typeof(PessoaModelMapping), new PessoaModelMapping());
+            _ = FluentMapper.EntityMaps.TryAdd(typeof(PessoaFisicaModelMapping), new PessoaFisicaModelMapping());
+            _ = FluentMapper.EntityMaps.TryAdd(typeof(PessoaJuridicaModelMapping), new PessoaJuridicaModelMapping());
+
+            _isConfigured = true;
+        }
     }
 }

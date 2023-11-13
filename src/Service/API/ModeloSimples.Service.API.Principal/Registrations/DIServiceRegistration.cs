@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ModeloSimples.Application.Behaviors;
 using ModeloSimples.Domain.Interfaces;
 using ModeloSimples.Domain.Services;
@@ -20,7 +21,7 @@ public static class DIServiceRegistration
 
         DapperConfig.ConfigureMappings();
 
-        services.RegistrationAllServices(configuration);
+        services.RegistrationAllServices(configuration, builder.Environment);
 
         var mappingProfiles = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(a => a.GetTypes())
@@ -40,11 +41,11 @@ public static class DIServiceRegistration
         return builder;
     }
 
-    private static IServiceCollection RegistrationAllServices(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection RegistrationAllServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
         services.AddLogger(configuration);
         services.AddStackExchangeRedisCache(configuration);
-        services.AddSQLServer(configuration);
+        services.AddSQLServer(configuration, environment);
         services.AddMassTransit(configuration);
 
         services.AddApplication();

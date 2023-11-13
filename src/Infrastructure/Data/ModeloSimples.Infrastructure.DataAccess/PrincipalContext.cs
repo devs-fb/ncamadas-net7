@@ -12,7 +12,10 @@ public class PrincipalContext : DbContext
 {
     private readonly List<IEvent> _pendingDomainEvents = new();
 
-    public PrincipalContext(DbContextOptions<PrincipalContext> options) : base(options) { }
+    public PrincipalContext(DbContextOptions<PrincipalContext> options) : base(options) 
+    {
+        Database.Migrate();
+    }
 
     public DbSet<Pessoa> Pessoa { get; set; }
     public DbSet<PessoaFisica> PessoaFisica { get; set; }

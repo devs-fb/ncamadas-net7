@@ -23,7 +23,6 @@ public class PessoaController : SingleBaseController
     private const string HttpPostBloquear = "Bloquear";
     private const string HttpPostDesbloquear = "Desbloquear";
 
-
     private readonly IMediator _mediator;
 
     public PessoaController(IMediator mediator)

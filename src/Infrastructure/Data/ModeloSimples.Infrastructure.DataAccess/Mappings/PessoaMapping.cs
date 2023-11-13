@@ -23,7 +23,7 @@ public class PessoaMapping
             auditoria.Property(a => a.Created).HasColumnName(MappingConstant.Auditoria.Criado);
             auditoria.Property(a => a.Modified).HasColumnName(MappingConstant.Auditoria.Modificado);
             auditoria.Property(a => a.IsRemoved).HasColumnName(MappingConstant.Auditoria.Removido);
-            auditoria.Property(a => a.IsBlocked).HasColumnName(MappingConstant.Auditoria.Criado);
+            auditoria.Property(a => a.IsBlocked).HasColumnName(MappingConstant.Auditoria.Bloquado);
         });
 
         builder.OwnsOne(p => p.Versao, versao =>
