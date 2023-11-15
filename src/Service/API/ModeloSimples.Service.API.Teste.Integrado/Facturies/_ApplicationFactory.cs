@@ -1,4 +1,4 @@
-﻿namespace ModeloSimples.Service.API.Teste.Integrado;
+﻿namespace ModeloSimples.Service.API.Teste.Integrado.Facturies;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;

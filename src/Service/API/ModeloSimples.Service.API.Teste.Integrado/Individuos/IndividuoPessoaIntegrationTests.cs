@@ -1,9 +1,11 @@
-namespace ModeloSimples.Service.API.Teste.Integrado;
+namespace ModeloSimples.Service.API.Teste.Integrado.Individuos;
 
 using Microsoft.AspNetCore.Mvc.Testing;
+using ModeloSimples.Service.API.Teste.Integrado.Facturies;
 using Newtonsoft.Json;
 using System.Text;
 
+[Collection("Test Collection")]
 public class IndividuoPessoaIntegrationTests : IClassFixture<ApplicationFactory<Program>>
 {
     private readonly ApplicationFactory<Program> _factory;
@@ -15,7 +17,7 @@ public class IndividuoPessoaIntegrationTests : IClassFixture<ApplicationFactory<
         //Ver em: https://learn.microsoft.com/pt-br/aspnet/core/test/integration-tests?view=aspnetcore-7.0
 
         _factory = factory;
-        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions() 
+        _client = _factory.CreateClient(new WebApplicationFactoryClientOptions()
         {
             BaseAddress = new Uri("https://localhost:21001")
         });
@@ -27,7 +29,7 @@ public class IndividuoPessoaIntegrationTests : IClassFixture<ApplicationFactory<
         // Arrange
         var pessoaModel = new
         {
-            tipo = "F", 
+            tipo = "F",
             pessoaFisica = new
             {
                 nomeSocial = "NomeSocial",
