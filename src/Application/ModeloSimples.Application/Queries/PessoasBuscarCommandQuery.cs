@@ -23,7 +23,7 @@ public class PessoasBuscarCommandQueryHandler : IRequestHandler<PessoasBuscarCom
     public PessoasBuscarCommandQueryHandler(ILogger<PessoasBuscarCommandQueryHandler> logger, IPessoaBuscarQuery buscarPessoaQuery)
     {
         _logger = logger;
-        _buscarPessoaQuery = buscarPessoaQuery ?? throw new ArgumentNullException(nameof(buscarPessoaQuery)); ;
+        _buscarPessoaQuery = buscarPessoaQuery ?? throw new ArgumentNullException(nameof(buscarPessoaQuery));
     }
 
     public async Task<ResultadoConsulta<IEnumerable<PessoaModel>>> Handle(PessoasBuscarCommandQuery request, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ public class PessoasBuscarCommandQueryHandler : IRequestHandler<PessoasBuscarCom
         }
         catch (Exception ex)
         {           
-            _logger.LogError(ERROMESSAGE, ex);
+            _logger.LogError(message: ERROMESSAGE, exception: ex);
 
             return await Task.FromResult(ResultadoConsulta<IEnumerable<PessoaModel>>.Falha(ERROMESSAGE));
         }
