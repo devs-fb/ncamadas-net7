@@ -96,12 +96,12 @@ public class PessoaService : IPessoaService
         catch (InexistenteException ex)
         {
             _logger.LogError(ex, string.Format(NOTFOUND, pessoaId));
-            throw ex;
+            throw;
         }
         catch (BloqueioException ex)
         {
             _logger.LogError(ex, string.Format(BLOCKED, pessoaId));
-            throw ex;
+            throw;
         }
         catch 
         {
@@ -142,12 +142,12 @@ public class PessoaService : IPessoaService
         catch (InexistenteException ex)
         {
             _logger.LogError(ex, string.Format(NOTFOUND, pessoaId));
-            throw ex;
+            throw;
         }
         catch (BloqueioException ex)
         {
             _logger.LogError(ex, string.Format(BLOCKED, pessoaId));
-            throw ex;
+            throw;
         }
         catch
         {
@@ -188,12 +188,12 @@ public class PessoaService : IPessoaService
         catch (InexistenteException ex)
         {
             _logger.LogError(ex, string.Format(NOTFOUND, pessoaId));
-            throw ex;
+            throw;
         }
         catch (BloqueioException ex)
         {
             _logger.LogError(ex, string.Format(BLOCKED, pessoaId));
-            throw ex;
+            throw;
         }
         catch
         {
@@ -234,12 +234,12 @@ public class PessoaService : IPessoaService
         catch (InexistenteException ex)
         {
             _logger.LogError(ex, string.Format(NOTFOUND, pessoaId));
-            throw ex;
+            throw;
         }
         catch (BloqueioException ex)
         {
             _logger.LogError(ex, string.Format(BLOCKED, pessoaId));
-            throw ex;
+            throw;
         }
         catch
         {

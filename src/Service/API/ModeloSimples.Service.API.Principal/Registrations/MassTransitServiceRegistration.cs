@@ -4,11 +4,24 @@ using ModeloSimples.Application.EventBus.Consumers;
 using ModeloSimples.Service.API.Principal.Configurations;
 using RabbitMQ.Client;
 
+public class MassTransitConsumerConfig
+{
+    public string ConsumerName { get; set; }
+    public string EventName { get; set; }
+    public int RetryCount { get; set; }
+    public int RetryInterval { get; set; }
+    public bool Durable { get; set; }
+}
+
 public static class MassTransitServiceRegistration
 {
+    private const string Local_APIPrincipal = "_APIPrincipal";
+
     public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration)
     {
+
         var rabbitMqConfiguration = configuration.GetSection(ConstantSection.RABBITMQ).Get<RabbitMqConfiguration>();
+        var consumerConfigs = configuration.GetSection("RabbitMqConfiguration:Consumers").Get<List<MassTransitConsumerConfig>>();
 
         services.AddMassTransit(cfgBus =>
         {
@@ -33,81 +46,49 @@ public static class MassTransitServiceRegistration
 
                 cfgRabbit.ExchangeType = ExchangeType.Fanout;
 
-                cfgRabbit.ReceiveEndpoint("PessoaCriada_APIPrincipal", ep =>
+                foreach (var consumerConfig in consumerConfigs)
                 {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaCriada");
-                    ep.Consumer<PessoaCriadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaFisicaCriada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaJuridicaCriada");
-                    ep.Consumer<PessoaFisicaCriadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaJuridicaCriada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaJuridicaCriada");
-                    ep.Consumer<PessoaJuridicaCriadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaEditada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaEditada");
-                    ep.Consumer<PessoaEditadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaFisicaEditada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaJuridicaEditada");
-                    ep.Consumer<PessoaFisicaEditadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaJuridicaEditada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaJuridicaEditada");
-                    ep.Consumer<PessoaJuridicaEditadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaBloqueada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaBloqueada");
-                    ep.Consumer<PessoaBloqueadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
-                cfgRabbit.ReceiveEndpoint("PessoaDesbloqueada_APIPrincipal", ep =>
-                {
-                    ep.UseMessageRetry(x => x.Interval(2, 1000));
-                    ep.Durable = true;
-                    ep.Bind("PessoaDesbloqueada");
-                    ep.Consumer<PessoaDesbloqueadaEventConsumer>(context);
-                    ep.Consumer<PublishErrorHandler>(context);
-                });
-
+                    var consumerType = Type.GetType(consumerConfig.ConsumerName);
+                    if (consumerType != null)
+                    {
+                        ConfigureReceiveEndpoint(cfgRabbit, context, Local_APIPrincipal, consumerConfig.EventName, consumerConfig.RetryCount, consumerConfig.RetryInterval, consumerConfig.Durable, consumerType);
+                    }
+                }
             });
         });
 
         return services;
+    }
+
+    private static void ConfigureReceiveEndpoint(
+    IRabbitMqBusFactoryConfigurator configurator,
+    IRegistrationContext context,
+    string eventLocal,
+    string eventName,
+    int retryCount,
+    int interval,
+    bool durable,
+    Type consumerType)
+    {
+        var method = typeof(MassTransitServiceRegistration)
+            .GetMethod(nameof(ConfigureReceiveEndpoint), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+            ?.MakeGenericMethod(consumerType);
+
+        method?.Invoke(null, new object[] { configurator, context, eventLocal, eventName, retryCount, interval, durable });
+    }
+
+    private static void ConfigureReceiveEndpoint<TConsumer>(IRabbitMqBusFactoryConfigurator configurator, IRegistrationContext context, string eventLocal, string eventName, (int retryCount, int interval)? messageRetry = null, bool durable = true)
+    where TConsumer : class, IConsumer
+    {
+        var (retryCount, interval) = messageRetry ?? (2, 1000);
+
+        configurator.ReceiveEndpoint($"{eventName}{eventLocal}", ep =>
+        {
+            ep.UseMessageRetry(x => x.Interval(retryCount, interval));
+            ep.Durable = true;
+            ep.Bind(eventName);
+            ep.Consumer<TConsumer>(context);
+            ep.Consumer<PublishErrorHandler>(context);
+        });
     }
 }
