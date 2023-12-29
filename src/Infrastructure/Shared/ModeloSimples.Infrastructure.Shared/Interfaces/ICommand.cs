@@ -1,8 +1,8 @@
-﻿namespace ModeloSimples.Infrastructure.Shared.Interfaces;
+﻿//namespace ModeloSimples.Infrastructure.Shared.Interfaces;
 
-using MediatR;
-using ModeloSimples.Infrastructure.Shared.Common;
+//using MediatR;
+//using ModeloSimples.Infrastructure.Shared.Common;
 
-public interface ICommand<T> : IRequest<ResultadoOperacao<T>> where T : class
-{
-}
+//public interface ICommand<T> : IRequest<ResultadoOperacao<T>> where T : class
+//{
+//}

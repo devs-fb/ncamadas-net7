@@ -2,25 +2,65 @@
 
 using System.Collections;
 
+/// <summary>
+/// Representa uma resposta genérica para uma operação, incluindo dados, tipo de dados, status de sucesso e mensagens associadas.
+/// </summary>
+/// <typeparam name="T">Tipo dos dados na resposta.</typeparam>
 public class Resposta<T>
 {
     private const string OperacaoBemSucedida = "Operação bem-sucedida.";
     private const string Desconhecido = "Desconhecido";
 
+    /// <summary>
+    /// Indica se a operação foi bem-sucedida.
+    /// </summary>
     public bool Sucesso { get; private set; }
-    public string TipoDeDados { get; private set; }
-    public T Dados { get; private set; }
-    public string Mensagem { get; private set; }
 
+    /// <summary>
+    /// Obtém o tipo de dados da operação.
+    /// </summary>
+    public string TipoDeDados { get; private set; }
+
+    /// <summary>
+    /// Obtém os dados da operação.
+    /// </summary>
+    public T Dados { get; private set; }
+
+    /// <summary>
+    /// Obtém a mensagem associada à operação.
+    /// </summary>
+    public IList<string> Mensagem { get; private set; }
+
+
+    /// <summary>
+    /// Cria uma resposta de operação bem-sucedida.
+    /// </summary>
+    /// <param name="dados">Dados da operação.</param>
     public Resposta(T dados)
     {
         Sucesso = true;
         TipoDeDados = ObterNomeDoTipo(dados);
         Dados = dados;
-        Mensagem = OperacaoBemSucedida;
+        Mensagem = new List<string>() { OperacaoBemSucedida };
     }
 
+    /// <summary>
+    /// Cria uma resposta de operação com falha, fornecendo uma mensagem de erro.
+    /// </summary>
+    /// <param name="mensagemErro">Mensagem de erro.</param>
     public Resposta(string mensagemErro)
+    {
+        Sucesso = false;
+        TipoDeDados = typeof(T).Name;
+        Dados = default;
+        Mensagem = new List<string>() { mensagemErro };
+    }
+
+    /// <summary>
+    /// Cria uma resposta de operação com falha, fornecendo uma lista de mensagens de erro.
+    /// </summary>
+    /// <param name="mensagemErro">Lista de mensagens de erro.</param>
+    public Resposta(IList<string> mensagemErro)
     {
         Sucesso = false;
         TipoDeDados = typeof(T).Name;

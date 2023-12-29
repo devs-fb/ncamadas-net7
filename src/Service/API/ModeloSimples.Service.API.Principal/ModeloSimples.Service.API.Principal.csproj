@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,5 +35,15 @@
   <ItemGroup>
     <InternalsVisibleTo Include="ModeloSimples.Service.API.Teste.Integrado" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/SwaggerDark.css" />
+    <EmbeddedResource Include="Assets/SwaggerSelectThemes.js" />
+    <EmbeddedResource Include="Assets/SwaggerClassic.css" />
+    <EmbeddedResource Include="Assets/SwaggerAzul.css" />
+    <EmbeddedResource Include="Assets/SwaggerFlat.css" />
+    <EmbeddedResource Include="Assets/SwaggerMonokai.css" />
+    <EmbeddedResource Include="Assets/SwaggerOutline.css" />
+  </ItemGroup>    
 
 </Project>

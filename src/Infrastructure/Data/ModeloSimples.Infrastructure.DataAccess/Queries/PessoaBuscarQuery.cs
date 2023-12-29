@@ -27,8 +27,7 @@ public class PessoaBuscarQuery : IPessoaBuscarQuery
     {
         try
         {
-            if (pessoa is null)
-                throw new ArgumentNullException(nameof(paginacaoOrdenacao));
+            pessoa ??= new () { PessoaFisica = new() { NomeSocial = "" }, PessoaJuridica = new() { NomeFantasia = "" } };
 
             paginacaoOrdenacao ??= new DataInfo(new PaginacaoInfo(1, 10, 0), new List<OrdenacaoInfo>());
 
@@ -110,7 +109,7 @@ public class PessoaBuscarQuery : IPessoaBuscarQuery
 
     private static void SQLBase(StringBuilder sql)
     {
-        sql.Append(@"SELECT [Pessoa].[PessoaId]
+        sql.Append(@"SELECT [Pessoa].[PessoaId] as Id
                            ,CASE WHEN [Pessoa].[Tipo] = 'PessoaJuridica' THEN 'J'
                                  WHEN [Pessoa].[Tipo] = 'PessoaFisica' THEN 'F'
                                  ELSE '' -- quando não for nem PessoaFisica nem PessoaJuridica
@@ -167,9 +166,6 @@ public class PessoaBuscarQuery : IPessoaBuscarQuery
             sql.Append("AND [PessoaJuridica].[RazaoSocial] LIKE @RazaoSocial ");
             parameters.Add("RazaoSocial", $"%{pessoaJuridica.RazaoSocial}%");
         }
-
-        // Adicione outras cláusulas WHERE para PessoaJuridica conforme necessário
-        // ...
     }
 
     private static void AdicionarClausulasOrderBy(DataInfo paginacaoOrdenacao, StringBuilder sql)

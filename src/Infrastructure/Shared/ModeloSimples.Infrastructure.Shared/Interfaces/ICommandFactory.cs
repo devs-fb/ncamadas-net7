@@ -1,6 +1,6 @@
-﻿namespace ModeloSimples.Infrastructure.Shared.Interfaces;
+﻿//namespace ModeloSimples.Infrastructure.Shared.Interfaces;
 
-public interface ICommandFactory<TCommand, TEntidade>
-{
-    TCommand CriarComando(TEntidade entidade);
-}
+//public interface ICommandFactory<TCommand, TEntidade>
+//{
+//    TCommand CriarComando(TEntidade entidade);
+//}

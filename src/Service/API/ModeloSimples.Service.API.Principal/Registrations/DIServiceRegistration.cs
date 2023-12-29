@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using ModeloSimples.Application.Behaviors;
+using ModeloSimples.Application.Queries;
 using ModeloSimples.Domain.Interfaces;
 using ModeloSimples.Domain.Services;
 using ModeloSimples.Infrastructure.DataAccess;
@@ -9,8 +9,10 @@ using ModeloSimples.Infrastructure.DataAccess.Queries;
 using ModeloSimples.Infrastructure.DataAccess.Queries.Mappings;
 using ModeloSimples.Infrastructure.Integration.ServiceOut.Service.Http;
 using ModeloSimples.Infrastructure.Integration.ServiceOut.Service.Webhook;
+using ModeloSimples.Infrastructure.Shared.DTO.CommandQuery.LGPD;
 using ModeloSimples.Infrastructure.Shared.Interfaces;
 using ModeloSimples.Infrastructure.Shared.Interfaces.Queries;
+using ModeloSimples.Service.API.Principal.Configurations;
 
 public static class DIServiceRegistration
 {
@@ -54,7 +56,7 @@ public static class DIServiceRegistration
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options => { SwaggerConfiguration.ConfigureSwaggerGen(options, configuration); });
 
         return services;
     }
@@ -83,6 +85,7 @@ public static class DIServiceRegistration
 
     private static IServiceCollection AddInfrastructureShared(this IServiceCollection services)
     {
+        services.AddScoped(typeof(IPessoasBuscarCommandQuery), typeof(PessoasBuscarCommandQuery));
 
         return services;
     }

@@ -4,9 +4,10 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ModeloSimples.Infrastructure.Shared.Common;
 using ModeloSimples.Infrastructure.Shared.DTO;
+using ModeloSimples.Infrastructure.Shared.DTO.CommandQuery.LGPD;
 using ModeloSimples.Infrastructure.Shared.Interfaces.Queries;
 
-public class PessoasBuscarCommandQuery : IRequest<ResultadoConsulta<IEnumerable<PessoaModel>>>
+public class PessoasBuscarCommandQuery : IPessoasBuscarCommandQuery
 {
     public DataInfo PaginacaoOrdenacao { get; set; }
 
