@@ -21,6 +21,10 @@ public static class WebApplicationExtension
 
         app.MapControllers();
 
+        app.UseRouting();
+
+        app.ConfigureEndpoints();
+
         return app;
     }
 
@@ -40,6 +44,19 @@ public static class WebApplicationExtension
         if (app.Environment.IsDevelopment())
         {
         }
+    }
+
+    public static void ConfigureEndpoints(this WebApplication app)
+    {
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHealthChecks("/hc"); 
+
+            //endpoints.MapHealthChecksUI(setup =>
+            //{
+            //    setup.UIPath = "/hc-ui"; 
+            //});
+        });
     }
 }
 

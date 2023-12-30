@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ModeloSimples.Application.Behaviors;
 using ModeloSimples.Application.Queries;
 using ModeloSimples.Domain.Interfaces;
@@ -21,6 +22,9 @@ public static class DIServiceRegistration
         var configuration = builder.Configuration;
         var services = builder.Services;
 
+        services.AddHealthChecks().AddCheck("self", () => HealthCheckResult.Healthy(), tags: new[] { "self" });
+        services.AddHealthChecks();//.AddDbContextCheck<PrincipalContext>(name: "Application DB Context", failureStatus: HealthStatus.Degraded)
+
         DapperConfig.ConfigureMappings();
 
         services.RegistrationAllServices(configuration, builder.Environment);
@@ -40,7 +44,19 @@ public static class DIServiceRegistration
 
         services.Configure<CachingBehaviorConfiguration>(configuration.GetSection(ConstantSection.CACHINGBEHAVIORCONFIGURATION));
 
+        //services.AddHealthChecksUI();
+
         return builder;
+    }
+
+    public static void AddApiVersion(this IServiceCollection service)
+    {
+        //service.AddApiVersioning(config =>
+        //{
+        //    config.DefaultApiVersion = new ApiVersion(1, 0);
+        //    config.AssumeDefaultVersionWhenUnspecified = true;
+        //    config.ReportApiVersions = true;
+        //});
     }
 
     private static IServiceCollection RegistrationAllServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)

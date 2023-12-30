@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ModeloSimples.Infrastructure.DataAccess;
 using System.Data;
 
@@ -24,6 +25,42 @@ public static class SQLServerServiceRegistration
             return connection;
         });
 
+        services.AddHealthChecks().AddCheck("sql-server-check", new SQLServerHealthCheck(sqlServerPrincipalConnectionString));
+
         return services;
+    }
+}
+
+public class SQLServerHealthCheck : IHealthCheck
+{
+    private readonly string _connectionString;
+
+    private const string ConnectionUnavailableMessage = "Não foi possível abrir uma conexão com o SQL Server.";
+    private const string ExceptionMessage = "Ocorreu uma exceção ao verificar a conexão com o SQL Server.";
+
+    public SQLServerHealthCheck(string connectionString)
+    {
+        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+    }
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync(cancellationToken);
+            if (connection.State == ConnectionState.Open)
+            {
+                return HealthCheckResult.Healthy();
+            }
+            else
+            {
+                return HealthCheckResult.Unhealthy(ConnectionUnavailableMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy(ExceptionMessage, ex);
+        }
     }
 }
