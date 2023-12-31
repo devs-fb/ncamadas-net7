@@ -21,31 +21,31 @@ public class IndividuoPessoaIntegrationTests : IClassFixture<ApplicationFactory<
         });
     }
 
-    [Fact]
-    public async Task TestCriarPessoa()
-    {
-        // Arrange
-        var pessoaModel = new
-        {
-            tipo = "F", 
-            pessoaFisica = new
-            {
-                nomeSocial = "NomeSocial",
-                dataNascimento = "2023-01-01T00:00:00Z",
-                genero = "M"
-            }
-        };
+    //[Fact]
+    //public async Task TestCriarPessoa()
+    //{
+    //    // Arrange
+    //    var pessoaModel = new
+    //    {
+    //        tipo = "F", 
+    //        pessoaFisica = new
+    //        {
+    //            nomeSocial = "NomeSocial",
+    //            dataNascimento = "2023-01-01T00:00:00Z",
+    //            genero = "M"
+    //        }
+    //    };
 
-        //var content = new StringContent(JsonConvert.SerializeObject(pessoaModel), Encoding.UTF8, "application/json");
+    //    //var content = new StringContent(JsonConvert.SerializeObject(pessoaModel), Encoding.UTF8, "application/json");
 
-        // Act - descomente para ocorrer o teste
-        //var response = await _client.PostAsync("/api/Pessoa/Criar", content);
+    //    // Act - descomente para ocorrer o teste
+    //    //var response = await _client.PostAsync("/api/Pessoa/Criar", content);
 
-        // Assert - descomente
-        //response.EnsureSuccessStatusCode();
+    //    // Assert - descomente
+    //    //response.EnsureSuccessStatusCode();
 
-        Assert.True(true);
-        await Task.CompletedTask.ConfigureAwait(false);
-    }
+    //    Assert.True(true);
+    //    await Task.CompletedTask.ConfigureAwait(false);
+    //}
 }
 

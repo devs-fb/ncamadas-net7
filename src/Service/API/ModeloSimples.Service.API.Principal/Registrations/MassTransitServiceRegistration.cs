@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using ModeloSimples.Application.EventBus;
-using ModeloSimples.Application.EventBus.Consumers;
 using ModeloSimples.Service.API.Principal.Configurations;
 using RabbitMQ.Client;
 
@@ -16,12 +15,13 @@ public class MassTransitConsumerConfig
 public static class MassTransitServiceRegistration
 {
     private const string Local_APIPrincipal = "_APIPrincipal";
+    private const string ConfigurationConsumers = "RabbitMqConfiguration:Consumers";
 
     public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration)
     {
 
         var rabbitMqConfiguration = configuration.GetSection(ConstantSection.RABBITMQ).Get<RabbitMqConfiguration>();
-        var consumerConfigs = configuration.GetSection("RabbitMqConfiguration:Consumers").Get<List<MassTransitConsumerConfig>>();
+        var consumerConfigs = configuration.GetSection(ConfigurationConsumers).Get<List<MassTransitConsumerConfig>>();
 
         services.AddMassTransit(cfgBus =>
         {
@@ -41,7 +41,7 @@ public static class MassTransitServiceRegistration
                     {
                         ssl.Protocol = System.Security.Authentication.SslProtocols.Tls12;
                     });
-                    h.Heartbeat(120);
+                    h.Heartbeat(10);
                 });
 
                 cfgRabbit.ExchangeType = ExchangeType.Fanout;
@@ -55,6 +55,7 @@ public static class MassTransitServiceRegistration
                     }
                 }
             });
+
         });
 
         return services;
