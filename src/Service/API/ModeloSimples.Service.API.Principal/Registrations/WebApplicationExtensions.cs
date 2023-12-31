@@ -1,4 +1,7 @@
-﻿using ModeloSimples.Service.API.Principal.Configurations;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
+using ModeloSimples.Service.API.Principal.Configurations;
 
 public static class WebApplicationExtension
 {
@@ -8,6 +11,13 @@ public static class WebApplicationExtension
         {
             throw new ArgumentNullException(nameof(app));
         }
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(app.Environment.ContentRootPath, "Assets")), 
+            RequestPath = "/img" 
+        });
 
         app.RunDevelopment();
 
@@ -48,14 +58,18 @@ public static class WebApplicationExtension
 
     public static void ConfigureEndpoints(this WebApplication app)
     {
-        app.UseEndpoints(endpoints =>
+        app.UseEndpoints(endpoint =>
         {
-            endpoints.MapHealthChecks("/hc"); 
+            endpoint.MapHealthChecks("/hc", new HealthCheckOptions 
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
-            //endpoints.MapHealthChecksUI(setup =>
-            //{
-            //    setup.UIPath = "/hc-ui"; 
-            //});
+            endpoint.MapHealthChecksUI(setup =>
+            {
+                setup.UIPath = "/hc-ui";
+                setup.AddCustomStylesheet($"{app.Environment.ContentRootPath}/Assets/HealthChecks_Dark.css");
+            });
         });
     }
 }

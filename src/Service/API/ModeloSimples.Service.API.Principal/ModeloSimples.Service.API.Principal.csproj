@@ -9,9 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Network" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Publisher.Datadog" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="7.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="7.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Data" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="7.0.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <!--<PackageReference Include="Azure.Identity" Version="1.10.2" />-->
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="MassTransit" Version="8.1.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
@@ -46,6 +57,8 @@
     <EmbeddedResource Include="Assets/SwaggerFlat.css" />
     <EmbeddedResource Include="Assets/SwaggerMonokai.css" />
     <EmbeddedResource Include="Assets/SwaggerOutline.css" />
+    <EmbeddedResource Include="Assets/HealthChecks_Dark.css" />
+    <EmbeddedResource Include="Assets/HealthChecks_Logo.jpg" />
   </ItemGroup>    
 
 </Project>
