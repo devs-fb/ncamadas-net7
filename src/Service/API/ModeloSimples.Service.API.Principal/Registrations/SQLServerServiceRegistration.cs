@@ -1,14 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ModeloSimples.Infrastructure.DataAccess;
+using ModeloSimples.Service.API.Principal.Common;
 using System.Data;
 
 public static class SQLServerServiceRegistration
-{
-    private const string StringConnectionName = "DefaultConnection";
+{    
     public static IServiceCollection AddSQLServer(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        var sqlServerPrincipalConnectionString = configuration.GetConnectionString(StringConnectionName);
+        var sqlServerPrincipalConnectionString = configuration.GetConnectionString(ConstantGlobal.StringConnectionName);
 
         services.AddDbContext<PrincipalContext>(options =>
         {           
