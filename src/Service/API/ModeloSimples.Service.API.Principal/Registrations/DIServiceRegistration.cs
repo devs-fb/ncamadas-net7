@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ModeloSimples.Application.Behaviors;
 using ModeloSimples.Application.Queries;
@@ -26,6 +25,8 @@ public static class DIServiceRegistration
 
         DapperConfig.ConfigureMappings();
 
+        services.AddHttpContextAccessor();
+
         services.RegistrationAllServices(configuration, builder.Environment);
 
         var mappingProfiles = AppDomain.CurrentDomain.GetAssemblies()
@@ -44,7 +45,7 @@ public static class DIServiceRegistration
 
         services.Configure<CachingBehaviorConfiguration>(configuration.GetSection(ConstantSection.CACHINGBEHAVIORCONFIGURATION));
 
-        services.AddAddHealthChecksService(configuration);
+        services.AddAddHealthChecksService(configuration, builder.Environment);
 
         return builder;
     }
@@ -65,7 +66,7 @@ public static class DIServiceRegistration
         services.AddStackExchangeRedisCache(configuration);
         services.AddSQLServer(configuration, environment);
         services.AddMassTransit(configuration);
-
+        
         services.AddApplication();
         services.AddDomain();
         services.AddInfrastructure();
@@ -118,7 +119,7 @@ public static class DIServiceRegistration
         return services;
     }
 
-    private static IServiceCollection AddAddHealthChecksService(this IServiceCollection services, ConfigurationManager configuration)
+    private static IServiceCollection AddAddHealthChecksService(this IServiceCollection services, ConfigurationManager configuration, IHostEnvironment environment)
     {
         const string AMQP = "amqps://{0}:{1}/{2}";
         
@@ -140,29 +141,41 @@ public static class DIServiceRegistration
                     })
                 .AddRabbitMQ(
                     rabbitConnectionString: rabbitConnectionString,
-                    name: "rabbitmq-broker",
-                    tags: new string[] { "rabbitmq", "broker" })
+                    name: ConstantHealthChecks.RabbitmqBroker,
+                    tags: new string[] { ConstantHealthChecks.RabbitMq, ConstantHealthChecks.Broker })
                 .AddRedis(
                     redisConnectionString: redisConfig.ConnectionString,
-                    name: "redis-cache",
+                    name: ConstantHealthChecks.RedisCache,
                     failureStatus: HealthStatus.Unhealthy,
-                    tags: new string[] { "redis", "cache" })
+                    tags: new string[] { ConstantHealthChecks.Redis, ConstantHealthChecks.Cache })
                 .AddCheck(
-                    ConstantHealthChecks.Self,
+                    name: ConstantHealthChecks.Self,
                     () => HealthCheckResult.Healthy(),
                     tags: new[] { ConstantHealthChecks.Self });
-
-
-                //.AddDatadogPublisher(ConstantHealthChecks.DatadogPublisherName);
 
         services
             .AddHealthChecksUI(setupSettings: setup => 
             {
-                setup.AddHealthCheckEndpoint("SampleCheck", "/hc");
+                const string baseUriFormat = "{0}://{1}:{2}/hc";
+                const string payloadTemplate = "{{\"servico\": \"[[LIVENESS]]\", \"uri\": \"{0}\", \"status\": \"[[FAILURE]]\", \"description\": \"[[DESCRIPTION]]\", \"timestamp\": \"[[TIMESTAMP]]\"}}";
+                const string restorePayloadTemplate = "{{\"servico\": \"[[LIVENESS]]\", \"uri\": \"{0}\", \"status\": \"recovered\"}}";
+
+                setup.AddHealthCheckEndpoint("SystemCheck", "/hc");
                 setup.MaximumHistoryEntriesPerEndpoint(500);
                 setup.SetMinimumSecondsBetweenFailureNotifications(4);
                 setup.SetEvaluationTimeInSeconds(5);
                 setup.SetApiMaxActiveRequests(5);
+
+                setup.SetHeaderText("Dashboard");
+                
+                var formattedBaseUri = string.Format(baseUriFormat, "https", "localhost", "21001");
+
+                setup.AddWebhookNotification(
+                    name: ConstantHealthChecks.Self,
+                    uri: "https://localhost:20000/webhook/api_principal",
+                    payload: string.Format(payloadTemplate, formattedBaseUri),
+                    restorePayload: string.Format(restorePayloadTemplate, formattedBaseUri)
+                );
             })
             .AddInMemoryStorage();
 
