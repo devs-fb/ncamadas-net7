@@ -822,3 +822,117 @@ h4 {
     margin-bottom: 0;
     color: var(--midGrayColor);
 }
+
+
+/*--------------*/
+
+.webhook-card {
+    background-color: #1e1e1e;
+    color: #fff;
+    padding: 20px;
+}
+
+    .webhook-card p {
+        margin-bottom: 10px;
+    }
+
+    .webhook-card b {
+        color: #f0f0f0;
+    }
+
+.react-json-view {
+    font-family: monospace;
+    cursor: default;
+    background-color: rgba(0, 0, 0, 0);
+    position: relative;
+}
+
+/* Adicione classes para cada estilo inline */
+
+/* Icon Container */
+.icon-container {
+    display: inline-block;
+    width: 17px;
+}
+
+/* Object Key */
+.object-key {
+    color: rgb(14, 193, 239) !important;
+    letter-spacing: 0.5px;
+    vertical-align: top;
+    opacity: 1 !important;
+}
+
+/* Object Key Val */
+.object-key-val {
+    display: inline-block;
+    cursor: pointer;
+}
+
+    .object-key-val span {
+        color: rgb(14, 193, 239);
+        opacity: 1 !important;
+    }
+
+        .object-key-val span span {
+            color: rgb(14, 193, 239) !important;
+            opacity: 1 !important;
+        }
+
+        .object-key-val span div span {
+            color: rgb(5 236 117 / 67%) !important;
+            opacity: 1 !important;
+        }
+
+        .object-key-val span div span svg {
+            color: rgb(5 236 117 / 67%) !important;
+            opacity: 1 !important;
+        }
+
+/* Object Content */
+.object-content {
+    margin-left: 6px;
+}
+
+/* Variable Row */
+.variable-row {
+    padding: 3px 5px 3px 20px !important;
+    border-left: 1px dotted rgb(4, 248, 79) !important;
+}
+
+/* Variable Value */
+.variable-value {
+    display: inline-block;
+    padding-right: 6px;
+    position: relative;
+    cursor: default;
+}
+
+/* String Value */
+.string-value {
+    cursor: default;
+    color: rgb(251, 76, 3) !important;
+}
+
+.data-type-label {
+    font-size: 9px !important;
+    margin-right: 4px !important;
+    opacity: 0.9 !important;
+    color: rgb(239, 234, 14) !important;
+}
+
+.object-size {
+    color: rgb(5 236 117 / 67%) !important;
+    font-size: 11px !important;
+    border-radius: 3px !important;
+    font-style: italic !important;
+    margin: 0px 6px 0px 0px !important;
+    cursor: default !important;
+}
+
+/* Copy to Clipboard Container */
+.copy-to-clipboard-container {
+    cursor: pointer;
+    display: inline;
+    color: rgb(203, 75, 22) !important;
+}
